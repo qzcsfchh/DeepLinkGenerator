@@ -1,0 +1,4 @@
+include ':deeplink-compiler'
+include ':deeplink-annotation'//include ':buildSrc'
+include ':app'
+rootProject.name = "DeepLinkGenerator"

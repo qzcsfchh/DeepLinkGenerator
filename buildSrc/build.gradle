@@ -1,0 +1,18 @@
+plugins {
+    id 'groovy'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+//repositories {
+//    google()
+//    jcenter()
+//    maven { url "file://${rootProject.rootDir.parent}/repo"}
+//}
+//
+//dependencies {
+//    implementation 'io.github.qzcsfchh.deeplink:deeplink-annotation:1.0.0'
+//}
