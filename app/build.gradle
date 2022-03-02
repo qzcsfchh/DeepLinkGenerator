@@ -38,6 +38,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    implementation project(':deeplink-annotation')
-    annotationProcessor project(':deeplink-compiler')
+//    implementation project(':deeplink-annotation')
+//    annotationProcessor project(':deeplink-compiler')
+
+    implementation 'io.github.qzcsfchh.deeplink:deeplink-annotation:1.0.0'
+    annotationProcessor 'io.github.qzcsfchh.deeplink:deeplink-compiler:1.0.0'
+
 }

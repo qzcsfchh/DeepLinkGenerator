@@ -97,7 +97,7 @@ class DeepLinkPlugin implements Plugin<Project>{
         dataMap.put("android:host", deepLink.get('host'))
         dataMap.put("android:scheme", deepLink.get('scheme'))
         def path = deepLink.get('path')
-        if (path != null) dataMap.put("android:path", deepLink.get('path'))
+        if (path != null&&!path.isEmpty()) dataMap.put("android:path", deepLink.get('path'))
         intentFilter.appendNode("data", dataMap)
 
         // 添加intent-filter.action

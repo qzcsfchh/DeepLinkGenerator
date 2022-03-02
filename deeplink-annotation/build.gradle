@@ -24,7 +24,6 @@ group 'io.github.qzcsfchh.deeplink' //group默认是rootProject的名称
 uploadArchives {
     repositories {
         mavenDeployer {
-            // 你可以先用本地路径测试一下，没问题再尝试上传远程仓库
             repository(url: uri("${rootProject.rootDir.absolutePath}/repo"))
         }
     }

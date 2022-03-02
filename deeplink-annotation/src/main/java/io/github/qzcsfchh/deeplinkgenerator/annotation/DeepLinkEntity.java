@@ -5,6 +5,7 @@ public class DeepLinkEntity {
     private String scheme;
     private String host;
     private String action;
+    private String path;
     private boolean exported;
 
     public String getFullClass() {
@@ -47,8 +48,23 @@ public class DeepLinkEntity {
         this.exported = exported;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     @Override
     public String toString() {
-        return "DeepLinkEntity{" + "fullClass='" + fullClass + '\'' + ", scheme='" + scheme + '\'' + ", host='" + host + '\'' + ", action='" + action + '\'' + ", exported=" + exported + '}';
+        return "DeepLinkEntity{" +
+                "fullClass='" + fullClass + '\'' +
+                ", scheme='" + scheme + '\'' +
+                ", host='" + host + '\'' +
+                ", action='" + action + '\'' +
+                ", path='" + path + '\'' +
+                ", exported=" + exported +
+                '}';
     }
 }

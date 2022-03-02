@@ -3,20 +3,26 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url 'repo'}
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.1"
-
-        classpath 'io.github.qzcsfchh.deeplink:deeplink-annotation:1.0.0'
     }
 }
 
-allprojects {
+//allprojects {
+//    println "project: ${it.name}"
+//    repositories {
+//        google()
+//        jcenter()
+//        maven { url '../repo'}
+//    }
+//}
+
+subprojects {
     repositories {
         google()
         jcenter()
-        maven { url 'repo'}
+        maven { url '../repo'}
     }
 }
 

@@ -79,6 +79,7 @@ public class DeepLinkCompiler extends AbstractProcessor {
             entity.setFullClass(type.toString());
             entity.setHost(Objects.requireNonNull(deepLink.host()));
             entity.setScheme(Objects.requireNonNull(deepLink.scheme()));
+            entity.setPath(deepLink.path());
             mDeepLinks.add(entity);
         }
         // 生成xml
@@ -100,7 +101,8 @@ public class DeepLinkCompiler extends AbstractProcessor {
             FileObject fo = APT.getFiler().getResource(StandardLocation.CLASS_OUTPUT, "", "deepLink");
             URI uri = fo.toUri();
             String path = uri.getPath();
-            String rootPath = path.substring(1, path.indexOf("/build") + "/build".length());
+
+            String rootPath = path.substring(isWindows()?1:0, path.indexOf("/build") + "/build".length());
             rootPath += "/tmp/deepLink";
             File dir = new File(rootPath);
             if (!dir.exists() && !dir.mkdirs()) {
@@ -132,6 +134,7 @@ public class DeepLinkCompiler extends AbstractProcessor {
                 attr.addAttribute("","","scheme","",deepLink.getScheme());
                 attr.addAttribute("","","host","",deepLink.getHost());
                 attr.addAttribute("","","exported","",String.valueOf(deepLink.isExported()));
+                attr.addAttribute("","","path","",deepLink.getPath());
                 handler.startElement("", "", "item", attr);
                 handler.endElement("","","item");
                 attr.clear();
@@ -144,5 +147,10 @@ public class DeepLinkCompiler extends AbstractProcessor {
             APT.trace(e);
             throw new RuntimeException(e);
         }
+    }
+
+
+    private boolean isWindows() {
+        return System.getProperties().getProperty("os.name").toUpperCase().contains("WINDOWS");
     }
 }
