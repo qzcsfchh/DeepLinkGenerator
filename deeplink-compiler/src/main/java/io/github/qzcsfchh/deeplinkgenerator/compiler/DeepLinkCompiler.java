@@ -42,6 +42,7 @@ import io.github.qzcsfchh.deeplinkgenerator.annotation.DeepLinkEntity;
 @SupportedAnnotationTypes("io.github.qzcsfchh.deeplinkgenerator.annotation.DeepLink")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class DeepLinkCompiler extends AbstractProcessor {
+    private static final String TAG = "DeepLinkCompiler";
     private final List<DeepLinkEntity> mDeepLinks = new ArrayList<>();
 
     @Override
@@ -71,10 +72,10 @@ public class DeepLinkCompiler extends AbstractProcessor {
             DeepLink deepLink = element.getAnnotation(DeepLink.class);
             DeepLinkEntity entity = new DeepLinkEntity();
             entity.setAction(deepLink.action());
-            if (entity.getAction() == null || entity.getAction().isEmpty()) {
-                String simpleName = element.getSimpleName().toString();
-                entity.setAction(simpleName.substring(0,1).toLowerCase()+simpleName.substring(1));
-            }
+//            if (entity.getAction() == null || entity.getAction().isEmpty()) {
+//                String simpleName = element.getSimpleName().toString();
+//                entity.setAction(simpleName.substring(0,1).toLowerCase()+simpleName.substring(1));
+//            }
             entity.setExported(deepLink.exported());
             entity.setFullClass(type.toString());
             entity.setHost(Objects.requireNonNull(deepLink.host()));
@@ -86,7 +87,7 @@ public class DeepLinkCompiler extends AbstractProcessor {
         if (!mDeepLinks.isEmpty()) {
             generateXml();
         } else {
-            APT.w("no deepLink config found.");
+            APT.w(TAG+" no deepLink config found.");
         }
         return true;
     }
@@ -94,7 +95,7 @@ public class DeepLinkCompiler extends AbstractProcessor {
 
 
     private void generateXml(){
-        APT.v(">>> start generating deepLink.xml");
+        APT.v(TAG+ ">>> start generating deepLink.xml");
         SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
         try {
             // 获取指定目录
@@ -112,8 +113,8 @@ public class DeepLinkCompiler extends AbstractProcessor {
             if (!file.exists() && !file.createNewFile()) {
                 throw new IOException("failed to create deepLink.xml");
             }
-            APT.d("uri  = " + uri);
-            APT.d("rootPath  = " + rootPath);
+            APT.d(TAG + " uri  = " + uri);
+            APT.d(TAG + " rootPath  = " + rootPath);
 
             // 处理xml写逻辑
             TransformerHandler handler = factory.newTransformerHandler();
@@ -142,7 +143,7 @@ public class DeepLinkCompiler extends AbstractProcessor {
 
             handler.endElement("","","deepLink");
             handler.endDocument();
-            APT.v("<<< finish generating deepLink.xml");
+            APT.v(TAG+ "<<< finish generating deepLink.xml");
         } catch (TransformerConfigurationException | IOException | SAXException e) {
             APT.trace(e);
             throw new RuntimeException(e);

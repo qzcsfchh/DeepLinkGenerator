@@ -10,7 +10,6 @@ class DeepLinkPlugin implements Plugin<Project>{
     void apply(Project target) {
         target.afterEvaluate {
             def startTime = System.currentTimeMillis()
-            target.logger.lifecycle "DeepLinkPlugin take effects."
             def android = target.extensions.getByName("android")
             android.applicationVariants.all { variant ->
                 //ApplicationVariant 代表每一种构建版本,如debug，release
@@ -18,7 +17,7 @@ class DeepLinkPlugin implements Plugin<Project>{
                 def variantName = variant.name.capitalize()
                 def processManifestTask = target.tasks.getByName("process${variantName}Manifest")
                 processManifestTask.doLast {
-                    target.logger.lifecycle 'start transform manifest'
+                    target.logger.lifecycle 'DeepLinkPlugin start inject manifest'
                     // 解析deepLink.xml文件
                     File deepLinkFile = new File(target.buildDir,"tmp/deepLink/deepLink.xml")
                     if (!deepLinkFile.exists()) {
@@ -49,7 +48,7 @@ class DeepLinkPlugin implements Plugin<Project>{
                     Node application = manifest.get("application").get(0)
                     NodeList activities = application.get("activity")
                     activities.forEach { Node activity ->
-                        target.logger.lifecycle "activity-> ${activity.attributes()}"
+                        target.logger.lifecycle "activity-> ${map2String(activity.attributes())}"
                         for (attr in activity.attributes()) {
                             String activityPath = attr.value
                             if (deepLinkMaps.containsKey(activityPath)) {
@@ -83,7 +82,7 @@ class DeepLinkPlugin implements Plugin<Project>{
                         manifestFile.write(XmlUtil.serialize(manifest))
                     }
 
-                    target.logger.lifecycle "finish transform manifest, cost: ${System.currentTimeMillis() - startTime}ms"
+                    target.logger.lifecycle "DeepLinkPlugin finish inject manifest, cost: ${System.currentTimeMillis() - startTime}ms."
                 }
 
             }
@@ -106,7 +105,8 @@ class DeepLinkPlugin implements Plugin<Project>{
         if (actions.size() == 0) {
             intentFilter.appendNode("action", Collections.singletonMap("android:name", "android.intent.action.VIEW"))
         }
-        intentFilter.appendNode("action", Collections.singletonMap("android:name", deepLink.get('action')))
+        def action = deepLink.get('action')
+        if (action!=null&&!action.isEmpty()) intentFilter.appendNode("action", Collections.singletonMap("android:name", action))
 
         // 添加intent-filter.category
         NodeList categories = intentFilter.get("category")
@@ -116,5 +116,14 @@ class DeepLinkPlugin implements Plugin<Project>{
         }
 
 
+    }
+
+    private static String map2String(Map map) {
+        StringBuilder sb = new StringBuilder('{')
+        map.entrySet().forEach{
+            sb.append("${it.key}").append(':').append("${it.value}").append(',')
+        }
+        sb.append('}')
+        sb.toString()
     }
 }

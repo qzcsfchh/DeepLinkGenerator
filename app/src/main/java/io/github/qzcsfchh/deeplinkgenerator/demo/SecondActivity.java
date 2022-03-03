@@ -26,7 +26,7 @@ public class SecondActivity extends AppCompatActivity {
         button.setLayoutParams(lp);
         setContentView(button);
         button.setOnClickListener(view ->{
-            startActivity(new Intent("mainActivity", Uri.parse("native://test/mainActivity")));
+            startActivity(new Intent().setData(Uri.parse("native://test2/mainActivity")));
         });
     }
 }
